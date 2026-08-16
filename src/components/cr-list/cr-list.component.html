@@ -16,9 +16,15 @@
 		<button type="button" (click)="load()">Retry</button>
 	</div>
 
-	<p *ngIf="state.status === 'empty'" class="cr-list__empty">No change requests to show.</p>
+	<p *ngIf="state.status === 'empty'" class="cr-list__empty">
+		No change requests to show.
+	</p>
 
-	<table *ngIf="state.status === 'loaded'" class="cr-list__table">
+	<p *ngIf="state.status === 'loaded' && visibleRows.length === 0" class="cr-list__no-matches">
+		No change requests matches this filter.
+	</p>
+
+	<table *ngIf="state.status === 'loaded' && visibleRows.length > 0" class="cr-list__table">
 		<thead>
 			<tr>
 				<th>ID</th>
