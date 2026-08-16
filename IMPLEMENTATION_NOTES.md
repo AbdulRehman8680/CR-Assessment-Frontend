@@ -1,7 +1,7 @@
 # Implementation Notes
-
-> Fill this in as part of your submission. 1–2 pages, bullet points are fine. Delete these
-> instructions before submitting.
+The app is two-screen reviewer UI on the top of mock CR API. The list screen fetches the CR  summaries allowed for the active user. Then applies  the status filter  on the rows and then render them as a table. The details screen loads on CR object and display these details form that object: a line-item difference between the baseline and the proposed change, an approval timeline and the Approve/Reject buttons. 
+Both of the components have async in ViewState with these states: (idle>loading>loaded/empty/error)
+The current user comes from the SessionService and carries the CR action and the allowed scope from the policy string. It then combine with the CR status to decide which actions are allowed for the current user.
 
 ## 1. What I changed
 <!-- Grouped by task: bugs fixed and features implemented (component + template). -->
