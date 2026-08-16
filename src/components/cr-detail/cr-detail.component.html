@@ -27,8 +27,8 @@
 					<tr *ngFor="let row of diff" class="cr-diff__row" [attr.data-kind]="row.kind">
 						<td>{{ row.sku }}</td>
 						<td class="cr-diff__kind">{{ row.kind }}</td>
-						<td>{{ row.baseline ? row.baseline.quantity + ' × ' + fmt(row.baseline.unitPrice) : '—' }}</td>
-						<td>{{ row.proposed ? row.proposed.quantity + ' × ' + fmt(row.proposed.unitPrice) : '—' }}</td>
+						<td>{{ describeLine(row.baseline) }}</td>
+						<td>{{ describeLine(row.proposed) }}</td>
 					</tr>
 				</tbody>
 			</table>

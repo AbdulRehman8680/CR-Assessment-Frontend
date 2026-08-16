@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CrApiService } from '../../api/cr-api.service';
 import { SessionService } from '../../session/session.service';
-import { CrDetail, TimelineEntry } from '../../models/cr.models';
+import { CrDetail, LineItem, TimelineEntry } from '../../models/cr.models';
 import { idle, loading, ViewState } from '../../common/view-state';
 import { computeDiff, DiffRow } from '../diff.util';
 import { formatMoney } from '../../common/money.util';
@@ -71,24 +71,29 @@ export class CrDetailComponent implements OnInit {
 		return this.detail ? formatMoney(amount, this.detail.currency) : String(amount);
 	}
 
+	/** One-line summary of a line item as shown in the diff panel. */
+	describeLine(item?: LineItem): string {
+		return item ? `${item.description} — ${item.quantity} × ${this.fmt(item.unitPrice)}` : '—';
+	}
+
 	async approve(): Promise<void> {
 		if (this.submitting || !this.canApprove) return;
-		await this.runAction(() => this.api.approve(this.session.user, this.id, new Date().toISOString()))
+		await this.runAction(() => this.api.approve(this.session.user, this.id, new Date().toISOString()));
 	}
 
 	async reject(): Promise<void> {
 		this.rejectControl.markAllAsTouched();
 		if (this.submitting || !this.canReject || this.rejectControl.invalid) return;
 		const reason = this.rejectControl.value.trim();
-		await this.runAction(() => this.api.reject(this.session.user, this.id, new Date().toISOString(), reason))
+		await this.runAction(() => this.api.reject(this.session.user, this.id, new Date().toISOString(), reason));
 	}
 
 	/**Run an action call, keeping the view coherent while it is in flight and if it fails.**/
-	private async runAction(call: () => Promise<CrDetail>): Promise<void>{
+	private async runAction(call: () => Promise<CrDetail>): Promise<void> {
 		this.submitting = true;
 		this.actionError = undefined;
 		try {
-			this.state = {status: 'loaded', data: await call()}
+			this.state = { status: 'loaded', data: await call() };
 		} catch (err) {
 			this.actionError = (err as Error).message;
 		} finally {
