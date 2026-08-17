@@ -43,6 +43,9 @@ export class CrDetailComponent implements OnInit {
 		} catch (err) {
 			this.state = { status: 'error', data: null, error: (err as Error).message };
 		}
+		finally {
+			this.syncRejectControl();
+		}
 	}
 
 	get detail(): CrDetail | null {
@@ -98,6 +101,13 @@ export class CrDetailComponent implements OnInit {
 			this.actionError = (err as Error).message;
 		} finally {
 			this.submitting = false;
+			this.syncRejectControl();
 		}
+	}
+
+	/** Keep the reason control in step with whether the user may reject at all. */
+	private syncRejectControl(): void {
+		if (this.canReject) this.rejectControl.enable({ emitEvent: false });
+		else this.rejectControl.disable({ emitEvent: false });
 	}
 }

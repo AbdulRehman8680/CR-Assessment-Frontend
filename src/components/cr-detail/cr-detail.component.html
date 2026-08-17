@@ -59,7 +59,7 @@
 			<div class="cr-actions__reject">
 				<label>
 					Reason for rejection
-					<textarea class="cr-actions__reason" [formControl]="rejectControl" [attr.disabled]="!canReject ? '' : null"></textarea>
+					<textarea class="cr-actions__reason" [formControl]="rejectControl"></textarea>
 				</label>
 				<p *ngIf="rejectControl.invalid && rejectControl.touched" class="cr-actions__reason-error" role="alert">
 					Please enter a reason.
