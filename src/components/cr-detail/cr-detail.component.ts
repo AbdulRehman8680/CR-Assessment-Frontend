@@ -42,8 +42,7 @@ export class CrDetailComponent implements OnInit {
 			this.state = { status: 'loaded', data: detail };
 		} catch (err) {
 			this.state = { status: 'error', data: null, error: (err as Error).message };
-		}
-		finally {
+		} finally {
 			this.syncRejectControl();
 		}
 	}
@@ -91,7 +90,7 @@ export class CrDetailComponent implements OnInit {
 		await this.runAction(() => this.api.reject(this.session.user, this.id, new Date().toISOString(), reason));
 	}
 
-	/**Run an action call, keeping the view coherent while it is in flight and if it fails.**/
+	/** Run an action call, keeping the view coherent while it is in flight and if it fails. */
 	private async runAction(call: () => Promise<CrDetail>): Promise<void> {
 		this.submitting = true;
 		this.actionError = undefined;
