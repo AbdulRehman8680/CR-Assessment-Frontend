@@ -21,4 +21,20 @@ describe('computeDiff', () => {
 		const rows = computeDiff(base, [{ ...base[0], quantity: 11 }, base[1]]);
 		expect(rows.find((r) => r.sku === 'SKU-A')?.kind).toBe('changed');
 	});
+
+	it('detects a description-only change as changed', () => {
+		const rows = computeDiff(base, [{ ...base[0], description: 'Widget A (new supplier)' }, base[1]]);
+		expect(rows.find((r) => r.sku === 'SKU-A')?.kind).toBe('changed');
+	});
+
+	it('leaves identical line items unchanged', () => {
+		expect(computeDiff(base, [...base]).every((r) => r.kind === 'unchanged')).toBe(true);
+	});
+
+	it('carries only the side that exists for removed rows', () => {
+		const removed = computeDiff(base, [base[0]]).find((r) => r.sku === 'SKU-B');
+		expect(removed?.baseline).toBeDefined();
+		expect(removed?.proposed).toBeUndefined();
+	});
+
 });
