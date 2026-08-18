@@ -31,6 +31,12 @@
 
 - Added 20 tests across the three specs: diff classification edge cases, list filter, (loading / error / retry), timeline ordering asserted in the DOM, the permission matrix, reject validation, and the action flows including failure, in-flight state and double-submit.
 
+**Beyond the listed tasks.**
+
+- While clicking through the UI I found the detail pane didn't follow the list selection. `CrDetailComponent` loaded in `ngOnInit`, which fires once, and the pane is never destroyed between selections — so the bound `id` changed while the rendered CR did not. 
+- This matters more than it looked because `approve()` sends `this.id` while `canApprove` reads the loaded CR's status, the two could disagree and an action could target a CR the reviewer was never shown. Added `ngOnChanges` (guarded on `firstChange`, so the initial load still runs once) and a reset of the reason control per load.
+- The existing tests assign `id` directly, which never triggers `ngOnChanges`, so I added a small host component with a real `[id]` binding to cover the actual input path.
+
 ## 2. Component & state model
 
 - The app is a two-screen reviewer UI on the top of a mock CR API. The list screen fetches the CR summaries allowed for the active user. Then applies the status filter on the rows and then render them as a table. The details screen loads one CR object and display these details from that object: a line-item difference between the baseline and the proposed change, an approval timeline and the Approve/Reject buttons.
@@ -46,6 +52,7 @@
 | Every load outcome has a visible state | ViewState status drives one *ngIf branch each in both templates |
 | A failed action never destroys loaded data | runAction only assigns state on success |
 | The reason box is only editable when the user may actually reject | syncRejectControl(), called after every load and every action |
+| The CR on screen is always the CR an action targets | ngOnChanges reloads when the bound `id` changes; actions read `this.id` and the loaded status together |
 
 ## 4. Testing strategy
 
