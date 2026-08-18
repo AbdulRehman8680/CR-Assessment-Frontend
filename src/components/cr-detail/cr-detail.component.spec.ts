@@ -4,10 +4,11 @@ import { CrApiService } from '../../api/cr-api.service';
 import { SessionService } from '../../session/session.service';
 import { users } from '../../api/fixtures';
 import { ReqUser } from '../../models/cr.models';
+import { Component } from '@angular/core';
 
 const flush = () => new Promise((r) => setTimeout(r, 0));
 
-async function render(user: ReqUser, id: string, setup?: (api:CrApiService) => void): Promise<ComponentFixture<CrDetailComponent>> {
+async function render(user: ReqUser, id: string, setup?: (api: CrApiService) => void): Promise<ComponentFixture<CrDetailComponent>> {
 	TestBed.configureTestingModule({
 		imports: [CrDetailComponent],
 		providers: [{ provide: SessionService, useValue: { user } }],
@@ -35,6 +36,17 @@ function timelineActions(fixture: ComponentFixture<CrDetailComponent>): string[]
 	const nodes: NodeListOf<HTMLElement> = fixture.nativeElement.querySelectorAll('.cr-timeline__action');
 	return Array.from(nodes).map((node) => (node.textContent ?? '').trim());
 }
+
+/** Host with a real [id] binding — direct field assignment never triggers ngOnChanges. */
+@Component({
+	standalone: true,
+	imports: [CrDetailComponent],
+	template: '<app-cr-detail [id]="id"></app-cr-detail>',
+})
+class DetailHostComponent {
+	id = 'CR-1';
+}
+
 
 describe('CrDetailComponent', () => {
 	it('loads and renders the change request title', async () => {
@@ -157,5 +169,24 @@ describe('CrDetailComponent', () => {
 
 		expect(spy).toHaveBeenCalledTimes(1);
 		expect(el(fixture, '.cr-actions__pending')).toBeNull();
+	});
+
+	it('reloads when the selected CR changes', async () => {
+		TestBed.configureTestingModule({
+			imports: [DetailHostComponent],
+			providers: [{ provide: SessionService, useValue: { user: users.approver } }],
+		});
+		await TestBed.compileComponents();
+		const fixture = TestBed.createComponent(DetailHostComponent);
+		fixture.detectChanges();
+		await flush();
+		fixture.detectChanges();
+		expect(fixture.nativeElement.querySelector('.cr-detail__header h2').textContent).toContain('Add 1 unit of SKU-A');
+
+		fixture.componentInstance.id = 'CR-2';
+		fixture.detectChanges();
+		await flush();
+		fixture.detectChanges();
+		expect(fixture.nativeElement.querySelector('.cr-detail__header h2').textContent).toContain('Replace SKU-B supplier');
 	});
 });

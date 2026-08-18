@@ -13,7 +13,7 @@ async function render(user: ReqUser, setup?: (api: CrApiService) => void): Promi
 		providers: [{ provide: SessionService, useValue: { user } }],
 	});
 	await TestBed.compileComponents();
-	setup?.(TestBed.inject(CrApiService))
+	setup?.(TestBed.inject(CrApiService));
 	const fixture = TestBed.createComponent(CrListComponent);
 	fixture.detectChanges(); // ngOnInit -> load()
 	await flush(); // let the mock API resolve

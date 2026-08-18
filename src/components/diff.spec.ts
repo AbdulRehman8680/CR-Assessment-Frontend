@@ -36,5 +36,4 @@ describe('computeDiff', () => {
 		expect(removed?.baseline).toBeDefined();
 		expect(removed?.proposed).toBeUndefined();
 	});
-
 });
