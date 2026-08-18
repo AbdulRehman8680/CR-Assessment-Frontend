@@ -78,4 +78,5 @@
 ## 7. What I'd improve with more time
 
 - Approving or rejecting doesn't refresh the list pane, so it shows the old status until reload. The demo shell owns both panes; syncing them properly needs shared state rather than two independent components.
-- `diff`, `visibleRows`, and `timeline` are getters, so they recompute on every change-detection cycle. That's fine at fixture scale and keeps the state model simple, but with a real list I'd memoize on the loaded data or move to observables rather than recompute per cycle.
+- Changing the "Acting as" filter does not reload the detail view to the first row in the list view by default of that organisation. if organisation changes.
+- `diff`, `visibleRows`, and `timeline` are getters, so they recompute on every change-detection cycle. That's fine at fixture scale and keeps the model simple, but with a real list I'd memoize on the loaded data or move to observables rather than recompute per cycle.
