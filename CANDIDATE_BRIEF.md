@@ -36,16 +36,19 @@ An Angular 15 app (standalone components, reactive forms; tested with Jest + Tes
 `IMPLEMENTATION_NOTES.md` describe the screens and state in your own words (3–5 sentences).
 
 **Task 1 — Fix the two failing tests at the root.**
+
 - The **diff/preview** misclassifies a changed line item (`diff.spec.ts`).
 - The **detail** page enables Approve for a user who isn't permitted (`cr-detail.component.spec.ts`).
 
 Find and fix the underlying cause of each.
 
 **Task 2 — Change Request list UI.** In `cr-list.component`:
+
 - the loading / loaded / empty / error states are wired — keep them correct, and
 - implement the **status filter** so `visibleRows` (and the rendered table) narrows by status.
 
 **Task 3 — Change Request detail UI.** In `cr-detail.component` + its template:
+
 - the **diff/preview panel** (added / removed / changed / unchanged rows, with totals and delta),
 - the **approval timeline**, rendered **chronologically**,
 - **permission-aware action visibility**: whether Approve/Reject are offered/enabled must respect both
@@ -111,7 +114,7 @@ tools.
 ## 10. Suggested 4-day timeline
 
 | Day | Focus |
-|---|---|
+| --- | --- |
 | 1 | Set up, read, orient. Fix the two failing tests (Task 1). |
 | 2 | List states + filter (Task 2). |
 | 3 | Detail: diff, timeline, permission gating, actions, validation (Task 3–4). |

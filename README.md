@@ -35,7 +35,7 @@ demo — the exercise itself is the list/detail components and their templates.
 The current user (from `SessionService`) carries permission strings shaped **`cr_{action}_{scope}`**:
 
 | action | meaning | | scope | meaning |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | `r` | read | | `u` | user — own CRs |
 | `a` | approve | | `w` | workspace |
 | `x` | apply | | `o` | org |

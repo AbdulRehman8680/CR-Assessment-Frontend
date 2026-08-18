@@ -33,7 +33,7 @@
 
 **Beyond the listed tasks.**
 
-- While clicking through the UI I found the detail pane didn't follow the list selection. `CrDetailComponent` loaded in `ngOnInit`, which fires once, and the pane is never destroyed between selections — so the bound `id` changed while the rendered CR did not. 
+- While clicking through the UI I found the detail pane didn't follow the list selection. `CrDetailComponent` loaded in `ngOnInit`, which fires once, and the pane is never destroyed between selections — so the bound `id` changed while the rendered CR did not.
 - This matters more than it looked because `approve()` sends `this.id` while `canApprove` reads the loaded CR's status, the two could disagree and an action could target a CR the reviewer was never shown. Added `ngOnChanges` (guarded on `firstChange`, so the initial load still runs once) and a reset of the reason control per load.
 - The existing tests assign `id` directly, which never triggers `ngOnChanges`, so I added a small host component with a real `[id]` binding to cover the actual input path.
 
